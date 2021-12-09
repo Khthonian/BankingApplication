@@ -1,11 +1,14 @@
 #pragma once
 #include <vector>
+#include <string>
+#include "Transaction.h"
 
 class Account {
+// Establish virtual functions
 public:
+    virtual double deposit(double deposit, double balance) = 0;
+    virtual double withdraw(double withdraw, double balance) = 0;
+protected:
     double balance; // balance
-    std::vector<double> history; // history
-    double deposit(double deposit, double balance);
-    double withdraw(double withdraw, double balance);
-    //std::string toString();
+    std::vector<Transaction> history; // history
 };

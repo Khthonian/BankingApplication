@@ -1,6 +1,7 @@
 #pragma once
+#include <string>
 
 class InterestEarning {
 public:
-	double computeInterest(bool isa, double balance, );
+	virtual double computeInterest(bool isa, double balance, int years) = 0;
 };

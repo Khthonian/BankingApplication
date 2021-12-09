@@ -5,6 +5,7 @@
 #include <iostream>
 #include <sstream>
 #include <vector>
+#include <chrono>
 #include "Current.h"
 #include "Savings.h"
 
@@ -15,6 +16,8 @@ int main()
 	// you may also want to store a collection of opened accounts here
 	std::vector<Current> currentAccounts;
 	std::vector<Savings> savingsAccounts;
+	std::vector<Savings> isaAccount;
+	bool currentOn = false;
 	bool isaOn = false;
 
 	std::cout << "~~~ Welcome to LincBank! ~~~" << std::endl;
@@ -49,7 +52,13 @@ int main()
 			// allow a user to open an account
 			// e.g., Account* a = new Savings(...);
 			if (parameters[1] == "1") {
-				std::cout << "New current account created";
+				if (currentOn = false) {
+					Current currentAccount(parameters[2]);
+					std::cout << "New current account created";
+				}
+				else {
+					std::cout << "Unable to make a new current account";
+				}
 			}
 			else if (parameters[1] == "2") {
 				std::cout << "New savings account created";
@@ -78,6 +87,12 @@ int main()
 		{
 			// allow user to transfer funds between accounts
 			// i.e., a withdrawal followed by a deposit!
+			// get the time of the transfer
+			time_t realTime = time(0);
+			char* currentTime = ctime(&realTime);
+
+			// make the transfer instance
+
 		}
 		else if (command.compare("project") == 0)
 		{
@@ -94,4 +109,3 @@ int main()
 	std::cout << "Press enter to quit...";
 	std::getchar();
 }
-

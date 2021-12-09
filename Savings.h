@@ -1,11 +1,12 @@
 #pragma once
+#include<iostream>
 #include <vector>
 #include "Account.h"
 #include "InterestEarning.h"
 
 class Savings : public Account, public InterestEarning {
-public:
+private:
 	double interestRate;
-private:	
-	bool isa;
+public:
+	double computeInterest(double balance, int years);
 };

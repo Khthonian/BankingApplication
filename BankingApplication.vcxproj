@@ -143,6 +143,7 @@
     <ClCompile Include="BankingApplication.cpp" />
     <ClCompile Include="Current.cpp" />
     <ClCompile Include="InterestEarning.cpp" />
+    <ClCompile Include="ISA.cpp" />
     <ClCompile Include="Savings.cpp" />
     <ClCompile Include="Transaction.cpp" />
   </ItemGroup>
@@ -150,6 +151,7 @@
     <ClInclude Include="Account.h" />
     <ClInclude Include="Current.h" />
     <ClInclude Include="InterestEarning.h" />
+    <ClInclude Include="ISA.h" />
     <ClInclude Include="Savings.h" />
     <ClInclude Include="Transaction.h" />
   </ItemGroup>
