@@ -16,7 +16,6 @@ public:
 	~Savings() {
 		std::cout << "Savings account closed!" << std::endl;
 	}
-	string accountName;
 	double computeInterest(double balance, int years);
 	double deposit(double deposit, double balance);
 	double withdraw(double withdraw, double balance);

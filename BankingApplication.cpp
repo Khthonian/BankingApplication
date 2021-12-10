@@ -15,9 +15,8 @@ int main()
 	std::vector <std::string> parameters;
 	std::string userCommand;
 	// you may also want to store a collection of opened accounts here
-	std::vector<Current*> currentAccounts;
-	std::vector<Savings*> savingsAccounts;
-	std::vector<ISA*> isaAccounts;
+	std::vector<Account*> accounts;
+	Account* lastViewedAccount[1];
 
 	// store bools to see whether an account of such types exists
 	bool currentOn = false;
@@ -25,7 +24,12 @@ int main()
 
 	// welcome the user and display options
 	std::cout << "~~~ Welcome to LincBank! ~~~" << std::endl;
-	std::cout << "1. open (parameters[1]) (initial_deposit): current(1), savings(2), isa(3)" << std::endl;
+	std::cout << "1. open [type] [initial_deposit]: current(1), savings(2), isa(3)" << std::endl;
+	std::cout << "2. view [code]: view balance and recent transactions" << std::endl;
+	std::cout << "~~~~~~~~~~~~~~~~~~~~" << std::endl;
+	std::cout << "#VIEW ACCOUNTS BEFORE MAKING TRANSACTIONS TO KNOW WHICH ACCOUNTS TO USE#" << std::endl;
+	std::cout << "deposit [sum]: deposit funds into last viewed account" << std::endl;
+	std::cout << "withdraw [sum]: withdraw funds from last viewed account" << std::endl;
 	std::cout << "x. exit" << std::endl;
 
 	while (userCommand != "exit")
@@ -52,23 +56,35 @@ int main()
 		if (command.compare("options") == 0)
 		{
 			// display the various commands to the user
+			std::cout << "~~~ Welcome to LincBank! ~~~" << std::endl;
+			std::cout << "1. open [type] [initial_deposit]: current(1), savings(2), isa(3)" << std::endl;
+			std::cout << "2. view [code]: view balance and recent transactions" << std::endl;
+			std::cout << "~~~~~~~~~~~~~~~~~~~~" << std::endl;
+			std::cout << "#VIEW AN ACCOUNT BEFORE MAKING TRANSACTIONS TO KNOW WHICH ACCOUNTS TO USE#" << std::endl;
+			std::cout << "deposit [sum]: deposit funds into last viewed account" << std::endl;
+			std::cout << "withdraw [sum]: withdraw funds from last viewed account" << std::endl;
+			std::cout << "x. exit" << std::endl;
 		}
 		else if (command.compare("open") == 0)
 		{
 			// allow a user to open an account
 			// e.g., Account* a = new Savings(...);
-			if (1 < parameters.size())
+			while (3 == parameters.size())
 			{
 				if ((parameters[1] == "1") && (currentOn == false)) {
 					Current* currentAccount = new Current(parameters[2]);
 					currentOn = true;
 					std::cout << "New current account created" << std::endl;
-					currentAccounts.push_back(currentAccount);
+					accounts.push_back(currentAccount);
+					lastViewedAccount[0] = currentAccount;
+					break;
 				}
 				else if (parameters[1] == "2") {
 					Savings* savingsAccount = new Savings(parameters[2]);
 					std::cout << "New savings account created" << std::endl;
-					savingsAccounts.push_back(savingsAccount);
+					accounts.push_back(savingsAccount);
+					lastViewedAccount[0] = savingsAccount;
+					break;
 				}
 				else if ((parameters[1] == "3") && (isaOn == false)) {
 					double valueCheck = std::stod(parameters[2]);
@@ -76,41 +92,69 @@ int main()
 						ISA* isaAccount = new ISA(parameters[2]);
 						isaOn = true;
 						std::cout << "New ISA account created" << std::endl;
-						isaAccounts.push_back(isaAccount);
+						accounts.push_back(isaAccount);
+						lastViewedAccount[0] = isaAccount;
+						break;
 					}
 					else {
 						std::cout << "Initial ISA balance must be >= 1000" << std::endl;
+						break;
 					}
 				}
 				else {
 					std::cout << "Account could not be made" << std::endl;
+					break;
 				}
-			}
-			else {
-				std::cout << "Invalid entry" << std::endl;
 			}
 		}
 		else if (command.compare("view") == 0)
 		{
 			// display an account according to an index (starting from 1)
 			// alternatively, display all accounts if no index is provided
-			if (1 < parameters.size())
-				if (parameters[1] == "1")
+			if (2 == parameters.size())
+			{
+				int i = std::stoi(parameters[1]) - 1;
+				if (i < accounts.size())
 				{
-					std::cout << "Current account | Balance: " << currentAccounts[0]->balance << std::endl;
-				}
-				else if (parameters[1] == "2") {
-					for (int i = 0; i < savingsAccounts.size(); i++)
+					if (dynamic_cast<Current*>(accounts[i]))
 					{
-						std::cout << "Savings account " << i + 1 << " | Balance: " << savingsAccounts[i]->balance << std::endl;
+						std::cout << "Current account | " << "Account Code: " << i + 1 << " | Balance: " << accounts[i]->balance << std::endl;
+						lastViewedAccount[0] = accounts[i];
+					}
+					else if (dynamic_cast<Savings*>(accounts[i]) && !(dynamic_cast<ISA*>(accounts[i])))
+					{
+						std::cout << "Savings account | " << "Account Code: " << i + 1 << " | Balance: " << accounts[i]->balance << std::endl;
+						lastViewedAccount[0] = accounts[i];
+					}
+					else if (dynamic_cast<ISA*>(accounts[i]))
+					{
+						std::cout << "ISA account | " << "Account Code: " << i + 1 << " | Balance: " << accounts[i]->balance << std::endl;
+						lastViewedAccount[0] = accounts[i];
 					}
 				}
-				else if (parameters[1] == "3") {
-					std::cout << "ISA account | Balance: " << isaAccounts[0]->balance << std::endl;
+				else if (i >= accounts.size())
+				{
+					std::cout << "This account does not exist" << std::endl;
 				}
-				else {
-					std::cout << "Invalid entry" << std::endl;
+			}
+			else if (1 == parameters.size())
+			{
+				for (int i = 0; i < accounts.size(); i++)
+				{
+					if (dynamic_cast<Current*>(accounts[i]))
+					{
+						std::cout << "Current account | " << "Account Code: " << i + 1 << " | Balance: " << accounts[i]->balance << std::endl;
+					}
+					else if (dynamic_cast<Savings*>(accounts[i]) && !(dynamic_cast<ISA*>(accounts[i])))
+					{
+						std::cout << "Savings account | " << "Account Code: " << i + 1 << " | Balance: " << accounts[i]->balance << std::endl;
+					}
+					else if (dynamic_cast<ISA*>(accounts[i]))
+					{
+						std::cout << "ISA account | " << "Account Code: " << i + 1 << " | Balance: " << accounts[i]->balance << std::endl;
+					}
 				}
+			}
 			else {
 				std::cout << "Invalid entry" << std::endl;
 			}
@@ -130,6 +174,7 @@ int main()
 			// get the time of the transfer
 			time_t realTime = time(0);
 			char* currentTime = ctime(&realTime);
+			std::cout << currentTime;
 
 			// make the transfer instance
 
