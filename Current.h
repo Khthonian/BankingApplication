@@ -5,8 +5,9 @@ class Current : public Account {
 private:
     double overdraft = 500;
 public:
+    Current() {}
     Current(string x) {
-        balance = x;
+        balance = std::stod(x);
         std::cout << "Current account created!" << std::endl;
     }
     ~Current() {

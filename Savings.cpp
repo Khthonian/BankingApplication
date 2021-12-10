@@ -8,3 +8,17 @@ double Savings::computeInterest(double balance, int years)
 	interest = balance * pow(innerEquation, (12 * years));	
 	return interest;
 }
+
+double Savings::deposit(double deposit, double balance)
+{
+	balance = balance + deposit;
+	std::cout << "Current balance: " << balance << std::endl;
+	return balance;
+}
+
+double Savings::withdraw(double withdraw, double balance)
+{
+	balance = balance - withdraw;
+	std::cout << "Current balance: " << balance << std::endl;
+	return balance;
+}

@@ -3,5 +3,5 @@
 
 class InterestEarning {
 public:
-	virtual double computeInterest(bool isa, double balance, int years) = 0;
+	virtual double computeInterest(double balance, int years) = 0;
 };
