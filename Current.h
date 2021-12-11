@@ -3,16 +3,17 @@
 
 class Current : public Account {
 private:
-    double overdraft = 500;
+    double limit = -500;
 public:
     Current() {}
-    Current(string x) {
-        balance = std::stod(x);
+    Current(double x) {
+        balance = (x);
         std::cout << "Current account created!" << std::endl;
     }
     ~Current() {
         std::cout << "Current account closed!" << std::endl;
     }
-    double deposit(double deposit, double balance);
-    double withdraw(double withdraw, double balance);
+    void deposit(double deposit);
+    void withdraw(double withdraw);
+    bool verifyTransfer(double transfer);
 };

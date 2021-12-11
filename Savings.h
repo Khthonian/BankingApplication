@@ -6,17 +6,20 @@
 
 class Savings : public Account, public InterestEarning {
 private:
-	double interestRate = 0;
+	double interestRate;
+	double limit;
+	double interest;
 public:
 	Savings() {}
-	Savings(string x) {
-		balance = std::stod(x);
+	Savings(double x) {
+		balance = (x);
 		std::cout << "Savings account created!" << std::endl;
 	}
 	~Savings() {
 		std::cout << "Savings account closed!" << std::endl;
 	}
 	double computeInterest(double balance, int years);
-	double deposit(double deposit, double balance);
-	double withdraw(double withdraw, double balance);
+	void deposit(double deposit);
+	void withdraw(double withdraw);
+	bool verifyTransfer(double transfer);
 };

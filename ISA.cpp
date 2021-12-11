@@ -8,16 +8,34 @@ double ISA::computeInterest(double balance, int years)
 	return interest;
 }
 
-double ISA::deposit(double deposit, double balance)
+void ISA::deposit(double deposit)
 {
 	balance = balance + deposit;
-	std::cout << "Current balance: " << balance << std::endl;
-	return balance;
+	cout << "New balance: " << balance << endl;
 }
 
-double ISA::withdraw(double withdraw, double balance)
+void ISA::withdraw(double withdraw)
 {
-	balance = balance - withdraw;
-	std::cout << "Current balance: " << balance << std::endl;
-	return balance;
+	verified = verifyTransfer(withdraw);
+	if (verified == true)
+	{
+		balance = balance - withdraw;
+		cout << "New balance: " << balance << endl;
+	}
+	else {
+		cout << "Attempted withdrawal exceeds account balance" << endl;
+	}
+}
+
+bool ISA::verifyTransfer(double transfer)
+{
+	bool verified;
+	limitCheck = balance - transfer;
+	if (limitCheck >= limit) {
+		verified = true;
+	}
+	else {
+		verified = false;
+	}
+	return verified;
 }

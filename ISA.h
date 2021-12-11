@@ -3,16 +3,19 @@
 #include "Savings.h"
 
 class ISA : public Savings {
+private:
+	double limit = 0;
 public:
 	ISA() {}
-	ISA(string x) {
-		balance = std::stod(x);
+	ISA(double x) {
+		balance = (x);
 		std::cout << "ISA account created!" << std::endl;
 	}
 	~ISA() {
 		std::cout << "ISA account closed!" << std::endl;
 	}
 	double computeInterest(double balance, int years);
-	double deposit(double deposit, double balance);
-	double withdraw(double withdraw, double balance);
+	void deposit(double deposit);
+	void withdraw(double withdraw);
+	bool verifyTransfer(double transfer);
 };

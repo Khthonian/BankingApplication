@@ -9,16 +9,34 @@ double Savings::computeInterest(double balance, int years)
 	return interest;
 }
 
-double Savings::deposit(double deposit, double balance)
+void Savings::deposit(double deposit)
 {
 	balance = balance + deposit;
-	std::cout << "Current balance: " << balance << std::endl;
-	return balance;
+	std::cout << "New balance: " << balance << endl;
 }
 
-double Savings::withdraw(double withdraw, double balance)
+void Savings::withdraw(double withdraw)
 {
-	balance = balance - withdraw;
-	std::cout << "Current balance: " << balance << std::endl;
-	return balance;
+	verified = verifyTransfer(withdraw);
+	if (verified == true)
+	{
+		balance = balance - withdraw;
+		cout << "New balance: " << balance << endl;
+	}
+	else {
+		cout << "Attempted withdrawal exceeds account balance" << endl;
+	}
+}
+
+bool Savings::verifyTransfer(double transfer)
+{
+	bool verified;
+	limitCheck = balance - transfer;
+	if (limitCheck >= limit) {
+		verified = true;
+	}
+	else {
+		verified = false;
+	}
+	return verified;
 }
