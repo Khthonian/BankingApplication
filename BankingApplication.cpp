@@ -92,11 +92,13 @@ int main()
 			// e.g., Account* a = new Savings(...);
 			while (3 == parameters.size())
 			{
+				/* create new object, add to storage vector, 
+				set new object as last viewed object, capture time of execution,
+				create a new transaction, set transaction description using timestamp*/
 				string oDescrip1 = "--initial deposit: ", oDescrip2 = " on ";
 				if ((parameters[1] == "1") && (currentOn == false)) {
 					Current* currentAccount = new Current(paycheck);
 					currentOn = true;
-					cout << "New current account created" << endl;
 					accounts.push_back(currentAccount);
 					lastViewedAccount[0] = currentAccount;
 					time_t realTime = time(0);
@@ -108,7 +110,6 @@ int main()
 				}
 				else if (parameters[1] == "2") {
 					Savings* savingsAccount = new Savings(paycheck);
-					cout << "New savings account created" << endl;
 					accounts.push_back(savingsAccount);
 					lastViewedAccount[0] = savingsAccount;
 					time_t realTime = time(0);
@@ -122,7 +123,6 @@ int main()
 					if (paycheck >= 1000) {
 						ISA* isaAccount = new ISA(paycheck);
 						isaOn = true;
-						cout << "New ISA account created" << endl;
 						accounts.push_back(isaAccount);
 						lastViewedAccount[0] = isaAccount;
 						time_t realTime = time(0);
@@ -152,6 +152,8 @@ int main()
 				int i = stoi(parameters[1]) - 1;
 				if (i < accounts.size())
 				{
+					/* determine account type, display account and
+					transactions, set as last viewed account*/
 					if (dynamic_cast<Current*>(accounts[i]))
 					{
 						cout << "Current account | " << "Account Code: " << i + 1 << " | Balance: " << accounts[i]->balance << endl;
@@ -195,6 +197,7 @@ int main()
 			{
 				for (int i = 0; i < accounts.size(); i++)
 				{
+					// same as before but without setting last viewed account
 					if (dynamic_cast<Current*>(accounts[i]))
 					{
 						cout << "Current account | " << "Account Code: " << i + 1 << " | Balance: " << accounts[i]->balance << endl;
@@ -235,12 +238,12 @@ int main()
 		// allow the user to deposit funds into their accounts
 		else if (command.compare("deposit") == 0)
 		{
+			// change account balance, create transaction
 			double paycheck = stod(parameters[1]);
 			int sender = stoi(parameters[1]) - 1;
 			ostringstream paycheckStream;
 			paycheckStream << std::fixed << std::setprecision(2) << paycheck;
 			string paycheckString = paycheckStream.str();
-			// allow user to deposit funds into an account
 			if (2 == parameters.size())
 			{
 				string dDescrip1 = "--deposit: ", dDescrip2 = " on ";
@@ -258,12 +261,12 @@ int main()
 		// allow the user to withdraw funds from their accounts
 		else if (command.compare("withdraw") == 0)
 		{
-			double paycheck = stod(parameters[1]);
+		// change account balance, create transaction	
+		double paycheck = stod(parameters[1]);
 			int sender = stoi(parameters[1]) - 1;
 			ostringstream paycheckStream;
 			paycheckStream << std::fixed << std::setprecision(2) << paycheck;
 			string paycheckString = paycheckStream.str();
-			// allow user to withdraw funds from an account
 			if (2 == parameters.size())
 			{
 				string wDescrip1 = "--withdrawal: ", wDescrip2 = " on ";
@@ -287,7 +290,7 @@ int main()
 			string paycheckString = paycheckStream.str();
 			int sender = stoi(parameters[1]) - 1;
 			int sendee = stoi(parameters[2]) - 1;
-			// i.e., a withdrawal followed by a deposit!
+			// change balances, create transaction
 			if (4 == parameters.size())
 			{
 				if ((sender < accounts.size()) && (sendee < accounts.size()))
@@ -328,14 +331,14 @@ int main()
 			{
 				for (int i = 0; i < accounts.size(); i++)
 				{
-					double part;
-					if ((dynamic_cast<Savings*>(accounts[i])))
-					{
-						part = static_cast<Savings*>(accounts[i])->computeInterest(accounts[i]->balance, time);
-					}
-					else if (dynamic_cast<ISA*>(accounts[i]))
+					double part = 0;
+					if (dynamic_cast<ISA*>(accounts[i]))
 					{
 						part = static_cast<ISA*>(accounts[i])->computeInterest(accounts[i]->balance, time);
+					}
+					else if ((dynamic_cast<Savings*>(accounts[i])))
+					{
+						part = static_cast<Savings*>(accounts[i])->computeInterest(accounts[i]->balance, time);
 					}
 					projection = projection + part;
 				}
